@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <title>Pregunta Especial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #74a9d8, #d1e7f7); /* Fondo azul cielo */
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 50px;
+      border-radius: 20px;
+      box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.15);
+      max-width: 400px;
+      width: 100%;
+      z-index: 2; /* Para que el contenedor quede por encima de los elementos flotantes */
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: bold;
+      color: #050705;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+    }
+
+    .btn {
+      width: 120px;
+      height: 60px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .yes {
+      background-color: #4caf50; /* Botón verde */
+      color: white;
+    }
+
+    .yes:hover {
+      transform: scale(1.1);
+      background-color: #45a049;
+    }
+
+    .no {
+      background-color: #f44336;
+      color: white;
+      z-index: 4;
+      position: absolute; /* Para poder moverlo */
+    }
+    .invisible-btn {
+      width: 120px;
+      height: 60px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Nuevo botón fuera del contenedor */
+    .click-btn {
+      position: absolute;
+      bottom: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #ff4081;
+      color: white;
+      border-radius: 15px;
+      border: none;
+      padding: 15px 30px;
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .click-btn:hover {
+      background-color: #e40061;
+    }
+
+    /* Animación para los corazones */
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      color: #ff3366;
+      animation: heartAnim 1s infinite ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes heartAnim {
+      0% { opacity: 0; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-30px); }
+      100% { opacity: 0; transform: translateY(0); }
+    }
+
+    /* Animación para las imágenes emoji flotantes */
+    .emoji-floating {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      animation: floatEmoji 3s ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes floatEmoji {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      50% { transform: translateY(-30px) scale(1.2); opacity: 0.7; }
+      100% { transform: translateY(0) scale(1); opacity: 0; }
+    }
+    
+    .floating-text {
+      position: absolute;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff3366;
+      animation: floatText 5s linear infinite;
+      opacity: 0.8;
+      z-index: 0;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(-30px); opacity: 0.7; }
+      100% { transform: translateY(0); opacity: 0.8; }
+    }
+
+    .container {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <h1>Me gustas, ¿Aceptas una cita conmigo?</h1>
+    <div class="buttons">
+      <button class="btn yes" onclick="alert('Nos vemos este Fin:)))')">Sí</button>
+      <button class="invisible-btn" id="invisibleBtn"></button> <!-- Botón invisible -->
+      <button class="btn no" id="noBtn" aria-label="No" title="No me aceptes 😅">No</button>
+    </div>
+  </div>
+
+  <!-- Reproductor de música (inicialmente no reproduce hasta que se active) -->
+  <audio id="backgroundMusic">
+    <source src="fondo.mp3" type="audio/mp3">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <!-- Botón fuera del contenedor -->
+  <button class="click-btn" id="playMusicBtn">Click aquí :)</button>
+
+  <script>
+    // Función para reproducir música cuando se hace clic en el botón
+    document.getElementById('playMusicBtn').addEventListener('click', function() {
+      const music = document.getElementById('backgroundMusic');
+      music.play().catch(function(error) {
+        console.log("Error al reproducir la música:", error);
+        
+      });
+      this.style.display = 'none';
+    });
+
+    // Hacer clic automáticamente en el botón invisible para reproducir la música
+    document.getElementById('invisibleBtn').addEventListener('click', function() {
+      const music = document.getElementById('backgroundMusic');
+      music.play().catch(function(error) {
+        console.log("Error al reproducir la música:", error);
+      });
+    });
+
+    // Animación de corazones
+    setInterval(function() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
+      document.body.appendChild(heart);
+      heart.style.left = `${Math.random() * window.innerWidth}px`;
+      heart.style.top = `${Math.random() * window.innerHeight}px`;
+      setTimeout(() => heart.remove(), 1000);
+    }, 500);
+
+    // Animación de emojis flotantes (alternando entre d.png y g.png)
+    setInterval(function() {
+      const emoji = document.createElement("img");
+      emoji.classList.add("emoji-floating");
+      // Seleccionar aleatoriamente una de las dos imágenes
+      emoji.src = Math.random() < 0.5 ? "d.png" : "g.png";
+      document.body.appendChild(emoji);
+      emoji.style.left = `${Math.random() * window.innerWidth}px`;
+      emoji.style.top = `${Math.random() * window.innerHeight}px`;
+      setTimeout(() => emoji.remove(), 1000);
+    }, 500);
+
+    const frases = [
+      "¡Me gustas Carmen!",
+      "¡Me gustas Muchoooo!",
+      "¡Aceptame la cita:)!",
+      "Casate conmigo(frase del futuro)",
+      "Veamos Gumball Juntos",
+      "❤️Carmen y Diego❤️",
+      "El poeta estuvo aqui"
+    ];
+    window.onload = function() {
+      const initialLeft = noBtn.getBoundingClientRect().left;
+      noBtn.style.left = `${280}px`;
+      noBtn.style.top = `${0}px`;
+    };
+    setInterval(function() {
+      const frase = document.createElement("div");
+      frase.classList.add("floating-text");
+      frase.innerText = frases[Math.floor(Math.random() * frases.length)];
+      document.body.appendChild(frase);
+      // Posicionar la frase aleatoriamente
+      frase.style.left = `${Math.random() * window.innerWidth}px`;
+      frase.style.top = `${Math.random() * window.innerHeight}px`;
+      // Eliminar la frase después de 6 segundos
+      setTimeout(() => frase.remove(), 3000);
+    }, 1500);
+
+    function playSound() {
+      const moveSound = new Audio("pou.mp3"); // Crear un nuevo objeto Audio
+      moveSound.play().catch(function(error) {
+        console.log("Error al reproducir el sonido: ", error);
+      }); // Intentar reproducir el sonido
+    }
+    // Movimiento del botón "No"
+    const noBtn = document.getElementById("noBtn");
+    function simulateClick() {
+      // Reproducir sonido
+      playSound();
+      noBtn.click();
+    }
+    noBtn.addEventListener("mouseover", function() {
+      let x, y;
+      if (!window.soundPlayed) {
+        window.soundPlayed = true; // Marcar que ya se ha interactuado
+        playSound(); // Reproducir el sonido
+      }
+      do {
+        // Generar posiciones aleatorias dentro del rango -300 a 600
+        x = Math.floor(Math.random() * (900)) - 300; // Genera entre -300 y 600
+        y = Math.floor(Math.random() * (600)) - 300; // Genera entre -300 y 600
+      } while (Math.abs(x - y) < 100); // Asegurar que la diferencia sea al menos 100 píxeles
+
+      // Establecer las nuevas posiciones
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+      simulateClick();
+    });
+  </script>
+</body>
+</html>
