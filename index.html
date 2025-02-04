@@ -194,13 +194,6 @@
       this.style.display = 'none';
     });
 
-    // Hacer clic automáticamente en el botón invisible para reproducir la música
-    document.getElementById('invisibleBtn').addEventListener('click', function() {
-      const music = document.getElementById('backgroundMusic');
-      music.play().catch(function(error) {
-        console.log("Error al reproducir la música:", error);
-      });
-    });
 
     // Animación de corazones
     setInterval(function() {
